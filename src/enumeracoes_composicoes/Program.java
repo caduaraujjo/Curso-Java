@@ -1,6 +1,6 @@
 package enumeracoes_composicoes;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import entities.Order;
 import entities.enums.OrderStatus;
@@ -9,7 +9,7 @@ public class Program {
 
 	public static void main(String[] args) {
 		
-		Order order = new Order (1080, LocalDate.now(), OrderStatus.PENDING_PAYMENT);
+		Order order = new Order (1080, LocalDateTime.now(), OrderStatus.PENDING_PAYMENT);
 		
 		System.out.println(order);
 		
