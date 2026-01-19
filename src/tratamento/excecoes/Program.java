@@ -1,50 +1,41 @@
 package tratamento.excecoes;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
+import java.util.Locale;
 import java.util.Scanner;
 
 import model.exceptions.DomainException;
-import models.entities.Reservation;
+import models.entities.Account;
 
 public class Program {
 
 	public static void main(String[] args) {
 
+		Locale.setDefault(Locale.US);
 		Scanner sc = new Scanner(System.in);
-		DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
 		try {
-			System.out.print("Room number: ");
-			int number = sc.nextInt();
-			System.out.print("Check-in date (dd/MM/yyyy): ");
-			LocalDate checkIn = LocalDate.parse(sc.next(), fmt);
-			System.out.print("Check-out date (dd/MM/yyyy): ");
-			LocalDate checkOut = LocalDate.parse(sc.next(), fmt);
+			System.out.println("Enter account data");
+			System.out.print("Number: ");
+			Integer number = sc.nextInt();
+			System.out.print("Holder: ");
+			sc.next();
+			String holder = sc.nextLine();
+			System.out.print("Initial balance: ");
+			Double balance = sc.nextDouble();
+			System.out.print("Withdraw limit: ");
+			Double withdrawLimit = sc.nextDouble();
+			Account acc = new Account(number, holder, balance, withdrawLimit);
 	
-			Reservation reservation = new Reservation(number, checkIn, checkOut);
-			System.out.println("Reservation: " + reservation);
-			
 			System.out.println();
-			System.out.println("Enter data to update the reservation:");
-			System.out.print("Check-in date (dd/MM/yyyy): ");
-			checkIn = LocalDate.parse(sc.next(), fmt);
-			System.out.print("Check-out date (dd/MM/yyyy): ");
-			checkOut = LocalDate.parse(sc.next(), fmt);
-			
-			reservation.updateDates(checkIn, checkOut);
-			System.out.println("Reservation: " + reservation);
-		}
-		catch (DateTimeParseException e) {
-			System.out.println("Invalid date format");
+			System.out.print("Enter amount for withdraw: ");
+			Double withdraw = sc.nextDouble();
+			acc.withdraw(withdraw);
+			System.out.printf("New balance: %.2f", acc.getBalance());
 		}
 		catch (DomainException e) {
-			System.out.println("Error in reservation: " + e.getMessage());
+			System.out.println("Withdraw error: " + e.getMessage());
 		}
-		catch (RuntimeException e) {
-			System.out.println("Unexpected error");
-		}
+		
 		sc.close();
 	}
 	
