@@ -3,10 +3,10 @@ package model.services;
 public class PaypalService implements OnlinePaymentService {
 
 	public Double paymentFee(Double amount) {
-		return amount += amount * 0.02;
+		return amount * 0.02;
 	}
 
 	public Double interest(Double amount , Integer months) {
-		return amount += amount * (months * 0.01);
+		return amount * 0.01 * months;
 	}
 }

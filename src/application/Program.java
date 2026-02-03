@@ -8,6 +8,7 @@ import java.util.Scanner;
 import model.entities.Contract;
 import model.entities.Installment;
 import model.services.ContractService;
+import model.services.PaypalService;
 
 public class Program {
 
@@ -22,12 +23,13 @@ public class Program {
 		LocalDate date = LocalDate.parse(sc.next(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		System.out.print("Valor do contrato: ");
 		Double totalValue = sc.nextDouble();
-		System.out.print("Entre com o numero de parcelas: ");
-		Integer months = sc.nextInt();
 
 		Contract contract = new Contract(number, date, totalValue);
 
-		ContractService service = new ContractService();
+		System.out.print("Entre com o numero de parcelas: ");
+		Integer months = sc.nextInt();
+
+		ContractService service = new ContractService(new PaypalService());
 		service.processContract(contract, months);
 
 		System.out.println();

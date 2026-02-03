@@ -7,18 +7,24 @@ import model.entities.Installment;
 
 public class ContractService {
 
+	private OnlinePaymentService onlinePaymentService;
+
+	public ContractService (OnlinePaymentService onlinePaymentService) {
+		this.onlinePaymentService = onlinePaymentService;
+	}
+
 	public void processContract(Contract contract, Integer months) {
-		PaypalService paypal = new PaypalService();
+
 		Double baseValue = contract.getTotalValue() / months;
-		Double amount = 0.0;
 
 		for (int i = 1; i <= months; i++) {
-			amount = paypal.interest(baseValue, i);
-			amount = paypal.paymentFee(amount);
-
 			LocalDate dueDate = contract.getDate().plusMonths(i);
+			
+			double interest = onlinePaymentService.interest(baseValue, i);
+			double fee = onlinePaymentService.paymentFee(baseValue + interest);
+			double quota = baseValue + interest + fee;
 
-			contract.getInstallments().add(new Installment(dueDate, amount));
+			contract.getInstallments().add(new Installment(dueDate, quota));
 		}
 	}
 }
