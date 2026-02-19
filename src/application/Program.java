@@ -1,43 +1,34 @@
 package application;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
-import java.util.Scanner;
-
-import model.entities.Product;
-import model.services.CalculationService;
 
 public class Program {
 
 	public static void main(String[] args) {
 
-		Locale.setDefault(Locale.US);
-		Scanner sc = new Scanner(System.in);
+		List<Integer> myInts = Arrays.asList(1, 2, 3, 4);
+		List<Double> myDoubles = Arrays.asList(3.14, 6.28);
+		List<Object> myObjs = new ArrayList<Object>();
 
-		List<Product> list = new ArrayList<>();
+		copy(myInts, myObjs);
+		print(myObjs);
+		copy(myDoubles, myObjs);
+		print(myObjs);
 
-		String path = "D:\\Usuário\\Documents\\estudos\\in.txt";
+	}
 
-		try (BufferedReader br = new BufferedReader(new FileReader(path))){
-
-			String line = br.readLine();
-			while (line != null) {
-				String[] fields = line.split(",");
-				list.add(new Product(fields[0], Double.parseDouble(fields[1])));
-				line = br.readLine();
-			}
-
-			Product x = CalculationService.max(list);
-			System.out.println("Max: ");
-			System.out.print(x);
-		} catch (IOException e) {
-			System.out.println("Error: " + e.getMessage());
+	public static void copy(List<? extends Number> source, List<? super Number> destiny) {
+		for (Number number : source) {
+			destiny.add(number);
 		}
+	}
 
-		sc.close();
+	public static void print(List<? super Number> list) {
+		for (Object obj : list) {
+			System.out.print(obj + " ");
+		}
+		System.out.println();
 	}
 }
