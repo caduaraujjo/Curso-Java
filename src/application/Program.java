@@ -1,44 +1,43 @@
 package application;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.time.Instant;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
-import entities.LogEntry;
+import entities.Student;
 
 public class Program {
 
 	public static void main(String[] args) {
 
 		Scanner sc = new Scanner(System.in);
+		Set<Student> set = new HashSet<>();
 
-		System.out.println("Enter file full path: ");
-		String path = sc.nextLine();
-
-		try (BufferedReader br = new BufferedReader(new FileReader(path))) {
-			
-			Set<LogEntry> set = new HashSet<>();
-
-			String line = br.readLine();
-			while (line != null) {
-				String[] fields = line.split(" ");
-				String username = fields[0];
-				Date moment = Date.from(Instant.parse(fields[1]));
-
-				set.add(new LogEntry(username, moment));
-
-				line = br.readLine();
-			}
-			System.out.println("Total users: " + set.size());
+		System.out.print("How many students for course A? ");
+		int quantityA = sc.nextInt();
+		for (int i = 1; i <= quantityA; i++) {
+			int id = sc.nextInt();
+			Student student = new Student(id);
+			set.add(student);
 		}
-		catch (IOException e) {
-			System.out.println("Error: " + e.getMessage());
+
+		System.out.print("How many students for course B? ");
+		int quantityB = sc.nextInt();
+		for (int i = 1; i <= quantityB; i++) {
+			int id = sc.nextInt();
+			Student student = new Student(id);
+			set.add(student);
 		}
+
+		System.out.print("How many students for course C? ");
+		int quantityC = sc.nextInt();
+		for (int i = 1; i <= quantityC; i++) {
+			int id = sc.nextInt();
+			Student student = new Student(id);
+			set.add(student);
+		}
+
+		System.out.println("Total students: " + set.size());
 		sc.close();
 	}
 }
