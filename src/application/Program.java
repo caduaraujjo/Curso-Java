@@ -1,39 +1,28 @@
 package application;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import model.entities.Product;
+import model.services.ProductService;
 
 public class Program {
-
+	
 	public static void main(String[] args) {
 
-		Scanner sc = new Scanner(System.in);
-		Map<String, Integer> map = new HashMap<>();
+		Locale.setDefault(Locale.US);
+		List<Product> list = new ArrayList<>();
 
-		System.out.println("Enter file full path: ");
-		String path = sc.nextLine();
+		list.add(new Product("Tv", 900.00));
+		list.add(new Product("Mouse", 50.00));
+		list.add(new Product("Tablet", 350.50));
+		list.add(new Product("HD Case", 80.90));
 
-		try (BufferedReader br = new BufferedReader(new FileReader(path))) {
-			String line = br.readLine();
-
-			while (line != null) {
-				String[] fields = line.split(",");
-				String name = fields[0];
-				Integer votes = Integer.parseInt(fields[1]);
-				map.put(name, map.getOrDefault(name, 0) + votes);
-				line = br.readLine();
-			}
-		} catch (IOException e) {
-			System.out.println("Error: " + e.getMessage());
-		}
-
-		for (String key : map.keySet()) {
-			System.out.println(key + ": " + map.get(key));
-		}
-		sc.close();
+		ProductService ps = new ProductService();
+		
+		double sum = ps.filteredSum(list, p -> p.getName().charAt(0) == 'T');
+ 
+		System.out.println("Sum = " + String.format("%.2f", sum));
 	}
 }
