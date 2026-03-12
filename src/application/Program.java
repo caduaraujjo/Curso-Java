@@ -1,28 +1,55 @@
 package application;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Scanner;
 
-import model.entities.Product;
-import model.services.ProductService;
+import model.entities.Employee;
 
 public class Program {
 	
 	public static void main(String[] args) {
 
 		Locale.setDefault(Locale.US);
-		List<Product> list = new ArrayList<>();
+		Scanner sc = new Scanner(System.in);
 
-		list.add(new Product("Tv", 900.00));
-		list.add(new Product("Mouse", 50.00));
-		list.add(new Product("Tablet", 350.50));
-		list.add(new Product("HD Case", 80.90));
+		System.out.print("Enter full file path: ");
+		String path = sc.nextLine();
 
-		ProductService ps = new ProductService();
-		
-		double sum = ps.filteredSum(list, p -> p.getName().charAt(0) == 'T');
- 
-		System.out.println("Sum = " + String.format("%.2f", sum));
+		try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+			
+			List<Employee> list = new ArrayList<>();
+			
+			String line = br.readLine();
+			while (line != null) {
+				String[] fields = line.split(",");
+				list.add(new Employee(fields[0], fields[1], Double.parseDouble(fields[2])));
+				line = br.readLine();
+			}
+			
+			System.out.println("Enter salary: ");
+			Double salary = sc.nextDouble();
+			System.out.println("Email of people whose salary is more than " + salary + ":");
+				list.stream()
+					.filter(x -> x.getSalary() > salary)
+					.map(Employee::getEmail)
+					.sorted(String.CASE_INSENSITIVE_ORDER)
+					.forEach(System.out::println);
+
+			Double sum = list.stream()
+					.filter(x -> x.getName().charAt(0) == 'M')
+					.mapToDouble(Employee::getSalary)
+					.sum();
+			System.out.println("Sum of salary of people whose name starts with 'M': " + sum);
+			sc.close();
+
+		}
+		catch (IOException e) {
+			System.out.println("Error massage: " + e.getMessage());
+		}
 	}
 }
